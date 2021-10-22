@@ -4,6 +4,7 @@ It's ok if you don't understand how to read files
 """
 import csv
 import os
+from collections import defaultdict
 
 cwd = os.path.dirname(__file__)
 
@@ -24,38 +25,15 @@ Print a message:
 September 2016.".
 """
 
-total = []
-number = []
+numberTotal = defaultdict(int)
 maxValue = 0
 maxidx = -1
 
 # Go through the calls
-for call in calls:
-    idx = 0
-    # If caller exist in the list number[] with the index idx
-    # update the total[idx] += seconds for the caller
-    try :
-        #    if idx > 0:
-        #        currvalue = total[idx]
-        # if the receiver exists in the list number[] with the index idx
-        # update the total[idx] += seconds for the receiver
-        idx = number.index(call[0])
-        currTotal = total[idx]
-        total[idx] = currTotal + int(call[3])
-    except:
-        # Add if the number is not in the number[] list
-        # add the seconds to the total[]
-        # confirm they have the same index, and the list length is also the same.
-        number.append(call[0])
-        total.append(int(call[3]))
-        assert(len(number) == len(total))
-        idx = len(number) - 1
-    # if the maxvalue is smaller than total[idx]
-    # update maxvalue with total[idx]
-    # update maxidx with idx
-    if total[idx] > maxValue:
-        maxValue = total[idx]
-        maxidx = idx
+for callFrom, callTo, date, duration in calls:
+    numberTotal[callFrom] += int(duration)
+    numberTotal[callTo] += int(duration)
 
+max_kv = max(numberTotal.items(), key=lambda x: x[1])
 # print the result
-print(f'{number[maxidx]} spent the longest time, {maxValue} seconds, on the phone during September 2016.')
+print(f'{max_kv[0]} spent the longest time, {max_kv[1]} seconds, on the phone during September 2016.')
