@@ -62,7 +62,7 @@ def getPattern(phone, pattern):
 
 calledByBangalore = []
 bangaloreCallCount = 0
-fixedLineCount = 0
+bangaloreReceiverCount = 0
 # Bangalore number
 patternBangalore = re.compile(r'\(080\)')
 #  - Fixed lines start with an area code enclosed in brackets. The area
@@ -84,13 +84,19 @@ for call in calls:
     bangaloreCallCount += 1
 
     mobile = getPattern(call[1], patternMobile)
+    fixedBangalore = getPattern(call[1],patternBangalore)
     fixed = getPattern(call[1],patternFixedLine)
     marketer = getPattern(call[1],patternTeleMarketer)
 
     if mobile:
-        calledByBangalore.append(mobile[:-2])
+      calledByBangalore.append(mobile[:-2])
     elif fixed:
-      fixedLineCount += 1
+      # Count up Bangalore receiver
+      if fixedBangalore:
+        bangaloreReceiverCount += 1
+      else:
+        pass
+
       calledByBangalore.append(fixed)
     elif marketer:
       calledByBangalore.append(marketer)
@@ -110,5 +116,5 @@ print(*sorted(set(calledByBangalore)), sep='\n')
 #The percentage should have 2 decimal digits
 percentage = 0.0
 if(bangaloreCallCount > 0):
-  percentage = float(fixedLineCount) / bangaloreCallCount
+  percentage = float(bangaloreReceiverCount) / bangaloreCallCount
 print(f"{percentage:.2%} percent of calls from fixed lines in Bangalore are calls to other fixed lines in Bangalore.")
