@@ -88,7 +88,7 @@ for call in calls:
     marketer = getPattern(call[1],patternTeleMarketer)
 
     if mobile:
-        calledByBangalore.append(mobile)
+        calledByBangalore.append(mobile[:-2])
     elif fixed:
       fixedLineCount += 1
       calledByBangalore.append(fixed)
